@@ -15,6 +15,6 @@ def test_get_portfolio_return():
 
 def test_calc_historical_var():
     d_weights = {'IEI': 0.1, 'VOO': 0.9}
-    l_conf_levels = [0.01, 0.05]
+    l_conf_levels = [0.99, 0.95]
     print(u.calc_historical_var(d_weights, l_conf_levels))
 test_calc_historical_var()

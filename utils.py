@@ -98,11 +98,14 @@ def get_portfolio_return(d_weights):
     # return df_result
 
 def calc_historical_var(d_weights, l_conf_levels):
+    l_quantiles = [1-x for x in l_conf_levels]
     df_pf = get_portfolio_return(d_weights)
-    return df_pf.quantile(l_conf_levels)
+    df_result = df_pf.quantile(l_quantiles)
+    df_result.index = l_conf_levels
+    return df_result
 
 
 
 
-    pass
+
 
