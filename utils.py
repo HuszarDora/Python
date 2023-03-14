@@ -17,11 +17,17 @@ def get_etf_returns(etf_name,
     df = df[[fieldname]]
 
     df['shifted'] = df.shift(1)
-    if return_type=='log':
+    if return_type == 'log':
         df['return'] = np.log(df[fieldname]/df['shifted'])
-    if return_type=='simple':
+    if return_type == 'simple':
         df['return'] = df[fieldname]/df['shifted']-1
-    return df[['return']]
+
+    # restrict df to result col
+    df = df[['return']]
+    # rename column
+    df.columns = [etf_name]
+
+    return df
 
 
 def get_total_return(etf, return_type='log'):
@@ -50,8 +56,30 @@ def get_price_return(etf, return_type='log'):
 
 
 
-def get_portfolio_return(d_pf, return_type='log'):
-    # steps
+def get_portfolio_return(l_df, d_weights):
+
+    # step1: join dataframe by index
+    df_joined = pd.concat(l_df, axis=1)
+    df_joined.sort_index(inplace=True)
+    # step2: drop na
+    df_joined.dropna(inplace=True)
+    # multiply by weights
+    # df_weighted = df_joined.mul(d_weights, axis=1)
+    df_weighted_return = df_joined * pd.Series(d_weights)
+    # sum cross multiplied results
+    s_portfolio_return = df_weighted_return.sum(axis=1)
+
+    return pd.DataFrame(s_portfolio_return, columns=['pf'])
+
+# def test_get_portfolio_return():
+#     df_iei = get_etf_returns('IEI', 'simple', 'Adj Close')
+#     df_voo = get_etf_returns('VOO', 'simple', 'Adj Close')
+#     l_df = [df_iei, df_voo]
+#     d_weights = {'IEI': 0.6, 'VOO': 0.4}
+#     df_pf = get_portfolio_return(l_df, d_weights)
+#     df_pf.plot()
+#     plt.show()
+
     # - join returns
     # - (drop na)
     # - (step2 multiply by weights)

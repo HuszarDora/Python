@@ -1,5 +1,7 @@
 import utils as u
 import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 def check_etf_price():
     etf = 'VOO'
@@ -31,4 +33,7 @@ def test_plot_total_return():
 def test_portfolio_return():
     d_pf = {'VOO': 0.6, 'IEI': 0.4}
     u.get_portfolio_return(d_pf, 'simple')
+
+
 test_portfolio_return()
+
