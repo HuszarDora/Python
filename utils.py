@@ -56,8 +56,11 @@ def get_price_return(etf, return_type='log'):
 
 
 
-def get_portfolio_return(l_df, d_weights):
-
+def get_portfolio_return(d_weights):
+    l_df = []
+    for etf, value in d_weights.items():
+        df_temp = get_total_return(etf, return_type='simple')
+        l_df.append(df_temp)
     # step1: join dataframe by index
     df_joined = pd.concat(l_df, axis=1)
     df_joined.sort_index(inplace=True)
@@ -93,7 +96,10 @@ def get_portfolio_return(l_df, d_weights):
     #         df_result =
     #     df_result = df_result.add(df_result, df_ret)
     # return df_result
-    pass
+
+def calc_historical_var(d_weights, l_conf_levels):
+    df_pf = get_portfolio_return(d_weights)
+    return df_pf.quantile(l_conf_levels)
 
 
 
